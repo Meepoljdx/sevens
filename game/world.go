@@ -408,8 +408,11 @@ func (w *World) updateEffects(dt float64) {
 				if e.Dead {
 					continue
 				}
-				dist := ef.Position.DistTo(e.Position)
-				if dist <= ef.Def.HitboxSize && ef.CanHit(e.ID) {
+				dx := ef.Position.X - e.Position.X
+				dy := ef.Position.Y - e.Position.Y
+				distSq := dx*dx + dy*dy
+				hitbox := ef.Def.HitboxSize
+				if distSq <= hitbox*hitbox && ef.CanHit(e.ID) {
 					ef.RecordHit(e.ID)
 
 					// Use player attributes for damage calc
@@ -435,14 +438,10 @@ func (w *World) updateEffects(dt float64) {
 					knockDir := e.Position.Sub(ef.Position).Normalize()
 					killed := e.TakeDamage(dmg, knockDir, ef.Def.Knockback)
 
-					// Life steal
+					// Life steal (reuse owner lookup from above)
 					if lifeSteal > 0 {
 						if owner, ok := w.Players[ef.OwnerID]; ok {
-							heal := int(float64(dmg) * lifeSteal)
-							owner.HP += heal
-							if owner.HP > owner.MaxHP {
-								owner.HP = owner.MaxHP
-							}
+							owner.HP = min(owner.HP+int(float64(dmg)*lifeSteal), owner.MaxHP)
 						}
 					}
 
@@ -561,9 +560,13 @@ func (w *World) spawnWave() {
 
 func (w *World) buildSnapshot() []byte {
 	msg := ServerMessage{
-		Type: "state",
-		Tick: w.TickNum,
-		Wave: w.Wave,
+		Type:    "state",
+		Tick:    w.TickNum,
+		Wave:    w.Wave,
+		Players: make([]PlayerState, 0, len(w.Players)),
+		Enemies: make([]EnemyState, 0, len(w.Enemies)),
+		Effects: make([]EffectState, 0, len(w.Effects)),
+		Drops:   make([]GroundDrop, 0, len(w.Drops)),
 	}
 
 	for _, p := range w.Players {

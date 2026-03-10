@@ -1167,7 +1167,7 @@ class Renderer {
 
     drawDrops(ctx, drops) {
         if (!drops) return;
-        const rarityColors = ['#aaaaaa', '#44ff44', '#4488ff', '#bb44ff', '#ff8800'];
+        const rarityColors = ['#cccccc', '#44ff44', '#4488ff', '#bb44ff', '#ff8800'];
         const rarityGlow   = ['rgba(170,170,170,0.15)', 'rgba(68,255,68,0.25)', 'rgba(68,136,255,0.35)', 'rgba(187,68,255,0.4)', 'rgba(255,136,0,0.5)'];
         const rarityNames  = ['普通', '优秀', '稀有', '史诗', '传说'];
         const slotIcons = { weapon: this._drawWeaponDrop, armor: this._drawArmorDrop, helmet: this._drawHelmetDrop, boots: this._drawBootsDrop, ring: this._drawRingDrop, amulet: this._drawAmuletDrop };

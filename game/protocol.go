@@ -21,16 +21,6 @@ type KeyState struct {
 	D bool `json:"d"`
 }
 
-type ClientMessage_Move struct {
-	TargetX float64 `json:"target_x"`
-	TargetY float64 `json:"target_y"`
-}
-
-type ClientMessage_Mouse struct {
-	X float64 `json:"x"`
-	Y float64 `json:"y"`
-}
-
 // === Server -> Client Messages ===
 
 type ServerMessage struct {

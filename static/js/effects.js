@@ -76,11 +76,10 @@ class ParticleSystem {
 
     emit(x, y, count, config) {
         // Cap total particles to prevent lag
-        const maxParticles = 500;
-        if (this.particles.length > maxParticles) {
+        if (this.particles.length > 750) return;
+        if (this.particles.length > 500) {
             count = Math.max(1, Math.floor(count * 0.3));
         }
-        if (this.particles.length > maxParticles * 1.5) return;
 
         for (let i = 0; i < count; i++) {
             const ang = config.angle !== undefined
