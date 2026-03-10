@@ -12,152 +12,180 @@ canvas#game { display: block; }
 /* 城镇界面 */
 #town-screen {
     position: fixed; inset: 0;
-    background: radial-gradient(ellipse at 50% 40%, #141424 0%, #050509 70%);
+    background: radial-gradient(ellipse at 50% 30%, #181830 0%, #080810 70%);
     display: none;
     flex-direction: column;
     align-items: center;
-    justify-content: flex-start;
-    padding-top: 40px;
     z-index: 250;
     color: #ddd;
+    overflow-y: auto;
+}
+.town-top {
+    width: 100%; text-align: center;
+    padding: 28px 0 0;
+    background: linear-gradient(180deg, rgba(255,215,0,0.04) 0%, transparent 100%);
 }
 #town-title {
-    font-size: 48px; color: #ffd700; letter-spacing: 6px;
-    text-shadow: 0 0 32px rgba(255,215,0,0.5), 0 3px 0 #7a5a0b;
-    margin-bottom: 8px;
+    font-size: 36px; color: #ffd700; letter-spacing: 6px;
+    text-shadow: 0 0 24px rgba(255,215,0,0.4), 0 2px 0 #7a5a0b;
+    margin-bottom: 4px;
 }
 #town-subtitle {
-    color: #8888aa; font-size: 16px; letter-spacing: 4px; margin-bottom: 24px;
+    color: #666; font-size: 13px; letter-spacing: 4px; margin-bottom: 16px;
 }
 #town-resources {
-    padding: 8px 16px;
+    display: inline-flex; gap: 16px;
+    padding: 6px 20px;
     border-radius: 999px;
-    border: 1px solid rgba(255,215,0,0.3);
+    border: 1px solid rgba(255,215,0,0.2);
     background: rgba(0,0,0,0.4);
-    font-size: 14px;
-    margin-bottom: 24px;
+    font-size: 13px; color: #aaa;
 }
-.town-layout {
-    display: flex;
-    gap: 20px;
-    max-width: 1000px;
-    width: 100%;
-    padding: 0 40px;
+#town-resources span { color: #ffd700; font-weight: bold; }
+
+/* 城镇中心区域 - 冒险按钮 */
+.town-center {
+    flex: 0 0 auto;
+    display: flex; flex-direction: column; align-items: center;
+    padding: 32px 0 24px;
 }
-.town-column {
-    flex: 1;
+.town-start-btn {
+    padding: 16px 52px;
+    border-radius: 999px;
+    border: 2px solid rgba(255,180,0,0.6);
+    font-size: 20px;
+    font-weight: bold;
+    letter-spacing: 6px;
+    cursor: pointer;
+    background: linear-gradient(135deg, #ff8c00, #ff5500);
+    color: #fff;
+    text-shadow: 0 1px 3px rgba(0,0,0,0.5);
+    box-shadow: 0 0 40px rgba(255,140,0,0.4), 0 4px 20px rgba(0,0,0,0.4);
+    transition: 0.3s;
+    position: relative;
 }
-.town-column h3 {
-    font-size: 14px;
-    color: #ffd700;
-    letter-spacing: 3px;
-    margin-bottom: 8px;
+.town-start-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 0 60px rgba(255,180,0,0.6), 0 6px 30px rgba(0,0,0,0.4);
+    background: linear-gradient(135deg, #ffa020, #ff6600);
+}
+.town-start-hint {
+    margin-top: 10px; font-size: 12px; color: #555; letter-spacing: 2px;
+}
+
+/* 城镇建筑网格 */
+.town-buildings {
+    max-width: 720px; width: 100%;
+    padding: 0 24px 24px;
+}
+.town-buildings h3 {
+    font-size: 12px; color: #ffd700; letter-spacing: 3px;
+    margin-bottom: 10px; text-align: center;
+    position: relative;
+}
+.town-buildings h3::before, .town-buildings h3::after {
+    content: ''; position: absolute; top: 50%;
+    width: 60px; height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(255,215,0,0.3));
+}
+.town-buildings h3::before { right: calc(50% + 60px); }
+.town-buildings h3::after { left: calc(50% + 60px); transform: scaleX(-1); }
+
+.town-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    gap: 8px;
+    margin-bottom: 16px;
 }
 .town-building-card {
-    border-radius: 10px;
-    border: 1px solid #333;
-    background: rgba(0,0,0,0.45);
+    border-radius: 8px;
+    border: 1px solid #2a2a3a;
+    background: rgba(255,255,255,0.02);
     padding: 10px 12px;
-    margin-bottom: 8px;
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
+    display: flex; flex-direction: column; gap: 4px;
+    transition: 0.2s;
+}
+.town-building-card:hover {
+    border-color: #444; background: rgba(255,255,255,0.04);
+}
+.town-building-card.locked {
+    opacity: 0.35;
 }
 .town-building-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+    display: flex; justify-content: space-between; align-items: center;
     font-size: 13px;
 }
 .town-building-name {
-    display: flex;
-    align-items: center;
-    gap: 6px;
+    display: flex; align-items: center; gap: 6px;
 }
-.town-building-name span.icon {
-    font-size: 18px;
-}
-.town-building-level {
-    font-size: 12px;
-    color: #ffd700;
-}
-.town-building-desc {
-    font-size: 11px;
-    color: #888;
-}
+.town-building-name span.icon { font-size: 18px; }
+.town-building-level { font-size: 11px; color: #ffd700; }
+.town-building-desc { font-size: 11px; color: #666; line-height: 1.4; }
 .town-building-actions {
-    display: flex;
-    justify-content: flex-end;
-    margin-top: 2px;
+    display: flex; justify-content: flex-end; margin-top: 2px;
 }
 .town-upgrade-btn {
-    padding: 2px 10px;
-    font-size: 11px;
-    border-radius: 999px;
-    border: 1px solid #ffd700;
-    background: rgba(255,215,0,0.08);
-    color: #ffd700;
-    cursor: pointer;
+    padding: 2px 10px; font-size: 11px; border-radius: 999px;
+    border: 1px solid #ffd700; background: rgba(255,215,0,0.08);
+    color: #ffd700; cursor: pointer; transition: 0.2s;
 }
+.town-upgrade-btn:hover { background: rgba(255,215,0,0.18); }
 .town-upgrade-btn:disabled {
-    opacity: 0.4;
-    border-color: #555;
-    color: #777;
-    background: rgba(255,255,255,0.02);
-    cursor: default;
+    opacity: 0.4; border-color: #555; color: #777;
+    background: rgba(255,255,255,0.02); cursor: default;
 }
 .town-footer {
-    margin-top: 20px;
-    font-size: 12px;
-    color: #666;
-}
-.town-start-btn {
-    margin-top: 16px;
-    padding: 10px 28px;
-    border-radius: 999px;
-    border: none;
-    font-size: 14px;
-    font-weight: bold;
-    letter-spacing: 3px;
-    cursor: pointer;
-    background: linear-gradient(90deg, #ffb000, #ff6a00);
-    color: #201000;
-    box-shadow: 0 0 24px rgba(255,160,0,0.45);
-}
-.town-start-btn:hover {
-    box-shadow: 0 0 34px rgba(255,200,0,0.7);
+    padding: 12px 0 20px; text-align: center;
+    font-size: 11px; color: #444;
 }
 
 /* 开始界面 */
 #start-screen {
     position: fixed; inset: 0;
-    background: radial-gradient(ellipse at 50% 40%, #1a1a3a 0%, #0a0a12 70%);
+    background: radial-gradient(ellipse at 50% 35%, #1a1a3a 0%, #0a0a12 70%);
     display: flex; flex-direction: column; align-items: center; justify-content: center;
     z-index: 200;
 }
+.start-bg-deco {
+    position: absolute; inset: 0; pointer-events: none; overflow: hidden;
+}
+.start-bg-deco::before {
+    content: ''; position: absolute;
+    top: 15%; left: 50%; transform: translateX(-50%);
+    width: 500px; height: 500px;
+    background: radial-gradient(circle, rgba(255,215,0,0.06) 0%, transparent 70%);
+    border-radius: 50%;
+}
 #start-screen h1 {
-    font-size: 80px; color: #ffd700; letter-spacing: 8px;
-    text-shadow: 0 0 40px rgba(255,215,0,0.5), 0 4px 0 #b8860b;
-    margin-bottom: 5px;
+    font-size: 72px; color: #ffd700; letter-spacing: 8px;
+    text-shadow: 0 0 40px rgba(255,215,0,0.4), 0 4px 0 #b8860b;
+    margin-bottom: 4px; position: relative;
 }
 #start-screen .subtitle {
-    color: #8888aa; font-size: 18px; letter-spacing: 6px; margin-bottom: 50px;
+    color: #666; font-size: 16px; letter-spacing: 8px; margin-bottom: 48px;
+    position: relative;
 }
-.hero-select { display: flex; gap: 20px; margin-bottom: 40px; flex-wrap: wrap; justify-content: center; }
+.hero-select {
+    display: flex; gap: 16px; margin-bottom: 36px;
+    flex-wrap: wrap; justify-content: center; position: relative;
+}
 .hero-card {
-    width: 180px; padding: 20px; border: 2px solid #333; border-radius: 8px;
+    width: 160px; padding: 18px 14px; border: 2px solid #2a2a3a; border-radius: 10px;
     background: rgba(255,255,255,0.02); cursor: pointer; text-align: center;
-    transition: 0.3s;
+    transition: 0.3s; position: relative;
 }
 .hero-card:hover {
     border-color: #ffd700; background: rgba(255,215,0,0.05);
-    transform: translateY(-5px); box-shadow: 0 10px 30px rgba(255,215,0,0.15);
+    transform: translateY(-4px); box-shadow: 0 8px 30px rgba(255,215,0,0.15);
 }
-.hero-card .hero-icon { font-size: 48px; margin-bottom: 10px; }
-.hero-card h3 { font-size: 16px; margin-bottom: 6px; }
-.hero-card p { color: #666; font-size: 12px; line-height: 1.6; }
-.hero-card.locked { opacity: 0.3; cursor: not-allowed; }
-.hero-card.locked:hover { transform: none; border-color: #333; }
+.hero-card .hero-icon { font-size: 40px; margin-bottom: 8px; }
+.hero-card h3 { font-size: 15px; margin-bottom: 5px; }
+.hero-card p { color: #555; font-size: 11px; line-height: 1.5; }
+.hero-card.locked { opacity: 0.25; cursor: not-allowed; }
+.hero-card.locked:hover { transform: none; border-color: #2a2a3a; box-shadow: none; }
+.hero-card.locked::after {
+    content: '🔒'; position: absolute; top: 8px; right: 10px; font-size: 14px;
+}
 
 /* HUD */
 #hud {
@@ -424,132 +452,108 @@ canvas#game { display: block; }
 <body>
 
 <div id="town-screen">
-    <div id="town-title">城镇 · 七星之都</div>
-    <div id="town-subtitle">T O W N &nbsp; O F &nbsp; S E V E N S</div>
-    <div id="town-resources">木材 0 · 石材 0 · 矿石 0 · 金币 0</div>
-    <div class="town-layout">
-        <div class="town-column">
-            <h3>核心建筑</h3>
+    <div class="town-top">
+        <div id="town-title">七星之都</div>
+        <div id="town-subtitle">T O W N &nbsp; O F &nbsp; S E V E N S</div>
+        <div id="town-resources">
+            <div>木材 <span>0</span></div>
+            <div>石材 <span>0</span></div>
+            <div>矿石 <span>0</span></div>
+            <div>金币 <span>0</span></div>
+        </div>
+    </div>
+
+    <div class="town-center">
+        <button class="town-start-btn" onclick="onClickStartAdventure()">开 始 冒 险</button>
+        <div class="town-start-hint">进入战场，击败怪物获取装备与经验</div>
+    </div>
+
+    <div class="town-buildings">
+        <h3>建 筑</h3>
+        <div class="town-grid">
             <div class="town-building-card">
                 <div class="town-building-header">
-                    <div class="town-building-name">
-                        <span class="icon">🏛️</span><span>市政厅</span>
-                    </div>
+                    <div class="town-building-name"><span class="icon">🏛️</span><span>市政厅</span></div>
                     <div class="town-building-level" id="town-b-hall-level">Lv.1</div>
                 </div>
-                <div class="town-building-desc">决定其他建筑最高等级，提升全局资源基础上限与收益。</div>
+                <div class="town-building-desc">决定其他建筑最高等级</div>
                 <div class="town-building-actions">
                     <button class="town-upgrade-btn" onclick="townUpgradeBuilding('hall')">升级</button>
                 </div>
             </div>
             <div class="town-building-card">
                 <div class="town-building-header">
-                    <div class="town-building-name">
-                        <span class="icon">📦</span><span>仓库</span>
-                    </div>
+                    <div class="town-building-name"><span class="icon">📦</span><span>仓库</span></div>
                     <div class="town-building-level" id="town-b-warehouse-level">Lv.0</div>
                 </div>
-                <div class="town-building-desc">提高木材/石材/矿石存储上限，扩展装备与材料背包容量。</div>
+                <div class="town-building-desc">提高资源存储上限</div>
                 <div class="town-building-actions">
                     <button class="town-upgrade-btn" onclick="townUpgradeBuilding('warehouse')">升级</button>
                 </div>
             </div>
-        </div>
-        <div class="town-column">
-            <h3>资源建筑</h3>
             <div class="town-building-card">
                 <div class="town-building-header">
-                    <div class="town-building-name">
-                        <span class="icon">🌲</span><span>伐木场</span>
-                    </div>
+                    <div class="town-building-name"><span class="icon">🌲</span><span>伐木场</span></div>
                     <div class="town-building-level" id="town-b-lumber-level">Lv.1</div>
                 </div>
-                <div class="town-building-desc">每 10 秒产出木材，用于大部分建筑与打造需求。</div>
+                <div class="town-building-desc">自动产出木材</div>
                 <div class="town-building-actions">
                     <button class="town-upgrade-btn" onclick="townUpgradeBuilding('lumber')">升级</button>
                 </div>
             </div>
             <div class="town-building-card">
                 <div class="town-building-header">
-                    <div class="town-building-name">
-                        <span class="icon">🪨</span><span>采石场</span>
-                    </div>
+                    <div class="town-building-name"><span class="icon">🪨</span><span>采石场</span></div>
                     <div class="town-building-level" id="town-b-quarry-level">Lv.1</div>
                 </div>
-                <div class="town-building-desc">每 10 秒产出石材，用于市政厅和防御相关建筑。</div>
+                <div class="town-building-desc">自动产出石材</div>
                 <div class="town-building-actions">
                     <button class="town-upgrade-btn" onclick="townUpgradeBuilding('quarry')">升级</button>
                 </div>
             </div>
             <div class="town-building-card">
                 <div class="town-building-header">
-                    <div class="town-building-name">
-                        <span class="icon">⛏️</span><span>采矿场</span>
-                    </div>
+                    <div class="town-building-name"><span class="icon">⛏️</span><span>采矿场</span></div>
                     <div class="town-building-level" id="town-b-mine-level">Lv.1</div>
                 </div>
-                <div class="town-building-desc">每 10 秒产出矿石，用于铁匠铺、饰品店等高级打造。</div>
+                <div class="town-building-desc">自动产出矿石</div>
                 <div class="town-building-actions">
                     <button class="town-upgrade-btn" onclick="townUpgradeBuilding('mine')">升级</button>
                 </div>
             </div>
-        </div>
-        <div class="town-column">
-            <h3>功能建筑</h3>
-            <div class="town-building-card">
+            <div class="town-building-card locked">
                 <div class="town-building-header">
-                    <div class="town-building-name">
-                        <span class="icon">⚒️</span><span>铁匠铺</span>
-                    </div>
+                    <div class="town-building-name"><span class="icon">⚒️</span><span>铁匠铺</span></div>
                 </div>
-                <div class="town-building-desc">使用材料打造武器和防具，提升冒险起始战力。（占位，后续细化）</div>
+                <div class="town-building-desc">打造武器防具 (即将开放)</div>
             </div>
-            <div class="town-building-card">
+            <div class="town-building-card locked">
                 <div class="town-building-header">
-                    <div class="town-building-name">
-                        <span class="icon">🍖</span><span>餐厅</span>
-                    </div>
+                    <div class="town-building-name"><span class="icon">🍖</span><span>餐厅</span></div>
                 </div>
-                <div class="town-building-desc">在开战前享用食物，为本局冒险提供不同的增益。（占位）</div>
+                <div class="town-building-desc">冒险前增益 (即将开放)</div>
             </div>
-            <div class="town-building-card">
+            <div class="town-building-card locked">
                 <div class="town-building-header">
-                    <div class="town-building-name">
-                        <span class="icon">⚗️</span><span>炼金工坊</span>
-                    </div>
+                    <div class="town-building-name"><span class="icon">⚗️</span><span>炼金工坊</span></div>
                 </div>
-                <div class="town-building-desc">制作战斗中使用的药剂和计时增益。（占位）</div>
-            </div>
-            <div class="town-building-card">
-                <div class="town-building-header">
-                    <div class="town-building-name">
-                        <span class="icon">💍</span><span>饰品店</span>
-                    </div>
-                </div>
-                <div class="town-building-desc">打造高阶饰品，强化暴击、冷却等高级属性。（占位）</div>
-            </div>
-            <div class="town-building-card">
-                <div class="town-building-header">
-                    <div class="town-building-name">
-                        <span class="icon">🧺</span><span>杂货铺</span>
-                    </div>
-                </div>
-                <div class="town-building-desc">直接购买装备、药水等补给品。（占位）</div>
+                <div class="town-building-desc">制作药剂 (即将开放)</div>
             </div>
         </div>
     </div>
-    <button class="town-start-btn" onclick="onClickStartAdventure()">开始冒险</button>
-    <div class="town-footer">当前版本为临时会话城镇：刷新页面后进度会重置，后续将接入完整存档系统。</div>
+
+    <div class="town-footer">临时会话城镇 · 刷新页面后进度重置 · 后续接入存档系统</div>
 </div>
 
 <div id="start-screen">
+    <div class="start-bg-deco"></div>
     <h1>七星传说</h1>
-    <div class="subtitle">S E V E N S &nbsp; R P G</div>
+    <div class="subtitle">S E V E N S</div>
     <div class="hero-select">
         <div class="hero-card" onclick="selectHero('warrior')">
             <div class="hero-icon">⚔️</div>
             <h3 style="color:#ff4444">战神·裂天</h3>
-            <p>近战战士<br>裂空斩 | 盾击冲锋<br>战吼 | <b>七星审判</b></p>
+            <p>近战战士<br>裂空斩 | 盾击冲锋<br>战吼 | 七星审判</p>
         </div>
         <div class="hero-card locked">
             <div class="hero-icon">🏹</div>
