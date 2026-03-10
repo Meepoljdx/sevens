@@ -324,6 +324,28 @@ function toggleStatsPanel() {
     document.getElementById('stats-panel').style.display = statsPanelOpen ? 'block' : 'none';
 }
 
+let escMenuOpen = false;
+
+function toggleEscMenu() {
+    escMenuOpen = !escMenuOpen;
+    document.getElementById('esc-menu-overlay').style.display = escMenuOpen ? 'flex' : 'none';
+}
+
+function setVolume(val) {
+    const v = parseInt(val);
+    sfx.volume = v / 100;
+    document.getElementById('vol-val').textContent = v + '%';
+}
+
+function backToTown() {
+    toggleEscMenu();
+    if (typeof enterTownMode === 'function') {
+        enterTownMode();
+    } else {
+        location.reload();
+    }
+}
+
 function toggleInventory() {
     inventoryOpen = !inventoryOpen;
     document.getElementById('inventory-panel').style.display = inventoryOpen ? 'block' : 'none';
@@ -469,6 +491,8 @@ window.addEventListener('keydown', (e) => {
     if (key === 'escape') {
         if (statsPanelOpen) { toggleStatsPanel(); e.preventDefault(); return; }
         if (inventoryOpen) { toggleInventory(); e.preventDefault(); return; }
+        if (document.getElementById('item-detail').style.display === 'block') { hideItemDetail(); e.preventDefault(); return; }
+        if (gameStarted) { toggleEscMenu(); e.preventDefault(); return; }
     }
     if (gameStarted && localPlayerID) {
         if (['q', 'w', 'e', 'r'].includes(key)) {

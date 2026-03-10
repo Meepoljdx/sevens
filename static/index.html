@@ -385,6 +385,40 @@ canvas#game { display: block; }
     from { transform: translateX(-30px); opacity: 0; }
     to { transform: translateX(0); opacity: 1; }
 }
+
+/* ESC 菜单 */
+#esc-menu-overlay {
+    position: fixed; inset: 0;
+    background: rgba(0,0,0,0.6);
+    z-index: 300; display: none;
+    align-items: center; justify-content: center;
+}
+#esc-menu {
+    width: 320px; background: rgba(10,10,25,0.97);
+    border: 2px solid #ffd700; border-radius: 14px;
+    box-shadow: 0 0 60px rgba(255,215,0,0.2);
+    padding: 30px 24px; text-align: center;
+}
+#esc-menu h2 {
+    font-size: 22px; color: #ffd700; letter-spacing: 4px; margin-bottom: 24px;
+}
+.esc-btn {
+    display: block; width: 100%; padding: 12px 0; margin-bottom: 10px;
+    border: 1px solid #555; border-radius: 8px;
+    background: rgba(255,255,255,0.04); color: #ddd;
+    font-size: 15px; cursor: pointer; transition: 0.2s;
+    letter-spacing: 2px;
+}
+.esc-btn:hover { background: rgba(255,215,0,0.1); border-color: #ffd700; color: #fff; }
+.esc-btn.danger { color: #f44; border-color: #a33; }
+.esc-btn.danger:hover { background: rgba(255,68,68,0.1); border-color: #f44; }
+.esc-volume {
+    display: flex; align-items: center; gap: 10px; justify-content: center;
+    margin: 16px 0 6px; font-size: 13px; color: #999;
+}
+.esc-volume input[type=range] {
+    width: 140px; accent-color: #ffd700;
+}
 </style>
 </head>
 <body>
@@ -652,6 +686,20 @@ canvas#game { display: block; }
     </div>
 </div>
 
+<div id="esc-menu-overlay" onclick="if(event.target===this)toggleEscMenu()">
+    <div id="esc-menu">
+        <h2>菜 单</h2>
+        <button class="esc-btn" onclick="toggleEscMenu()">继续游戏</button>
+        <button class="esc-btn" onclick="toggleEscMenu();toggleStatsPanel()">属性面板 (I)</button>
+        <button class="esc-btn" onclick="toggleEscMenu();toggleInventory()">背包装备 (B)</button>
+        <div class="esc-volume">
+            <span>音量</span>
+            <input type="range" min="0" max="100" value="30" oninput="setVolume(this.value)" id="vol-slider">
+            <span id="vol-val">30%</span>
+        </div>
+        <button class="esc-btn danger" onclick="backToTown()">返回城镇</button>
+    </div>
+</div>
 <div id="item-detail"></div>
 <div id="pickup-notifs"></div>
 <div id="wave-announce"></div>
