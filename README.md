@@ -1,5 +1,7 @@
 # SEVENS: 七星传说
 
+[English](./README_en.md) | [中文](./README.md)
+
 多人在线 RPG 游戏，Go WebSocket 服务端 + Canvas 前端渲染。
 
 ## 快速开始
